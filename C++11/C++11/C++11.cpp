@@ -5,41 +5,21 @@
 #include <stdint.h>
 #include <Windows.h>
 #include <type_traits>
+#include <string>
+#include <functional>
+using std::string;
+using std::placeholders::_1;
 
-__pragma(pack(push, 4))
-union Color
+bool check_size(const string & s, string::size_type sz)
 {
-	struct {
-		uint8_t b;
-		uint8_t g;
-		uint8_t r;
-		uint8_t alpha;
-	}RGBA;
-	uint32_t value;
+	return s.size() > sz;
 };
 
-Color operator"" _argb(const char* agrb) {
-	Color color;
-	char* endPtr = nullptr;
-	color.value = strtol(agrb, NULL, 0);
-	return color;
-}
-
-Color operator"" _argb(const char* agrb, std::size_t size) {
-	Color color;
-	char* endPtr = nullptr;
-	color.value = strtol(agrb, NULL, 0);
-	return color;
-}
-__pragma(pack(pop))
-
-
+auto check6 = std::bind(check_size, _1, 6);
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	Color color = std::move("0x12345678"_argb);
-
-	printf("r:%02x g:%02x b:%02x a:%02x", color.RGBA.r, color.RGBA.g, color.RGBA.b, color.RGBA.alpha);
+	check6("hello");
 	getchar();
 	return 0;
 }
