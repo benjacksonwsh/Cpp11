@@ -3,11 +3,10 @@
 
 #include "stdafx.h"
 #include <stdint.h>
+#include <functional>
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	
-
 	getchar();
 	return 0;
 }
