@@ -4,62 +4,25 @@
 #include "stdafx.h"
 #include <stdint.h>
 #include <Windows.h>
-#include <tchar.h>
-#include <type_traits>
-#include <string>
 
-__pragma(pack(push, 4))
-union Color
-{
-	struct {
-		uint8_t b;
-		uint8_t g;
-		uint8_t r;
-		uint8_t alpha;
-	}RGBA;
-	uint32_t value;
-};
-
-Color operator"" _argb(const char* agrb) {
-	Color color;
-	
-	color.value = strtoul(agrb, NULL, 0);
-	return color;
+constexpr int Fibonacci(uint32_t n) {
+	return 0==n ? 0 : (n<3) ? 1 : (Fibonacci(n-1)+Fibonacci(n-2));
 }
-
-Color operator"" _argb(const char* argb, std::size_t size) {
-	Color color;
-	char* endPtr = nullptr;
-	
-	std::string strColor(argb,size);
-	
-	int signPos = strColor.find('#');
-	if (signPos >= 0)
-	{
-		strColor.replace(signPos, 1, "0x");
-	}
-
-	color.value = strtoul(strColor.c_str(), NULL, 0);
-	return color;
-}
-__pragma(pack(pop))
-
-void draw(const Color&  color)
-{
-	printf("r:%02x g:%02x b:%02x a:%02x", color.RGBA.r, color.RGBA.g, color.RGBA.b, color.RGBA.alpha);
-}
-
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	Color color = 0xFFEEBBDD_argb;
-	printf("r:%02x g:%02x b:%02x a:%02x\n", color.RGBA.r, color.RGBA.g, color.RGBA.b, color.RGBA.alpha);
+	uint32_t fib[] = {
+		Fibonacci(11ul),Fibonacci(12ul),
+		Fibonacci(13ul),Fibonacci(14ul),
+		Fibonacci(15ul),Fibonacci(16ul),
+		Fibonacci(17ul),Fibonacci(18ul), 
+	};
 
-	color = "#FEBBDDAA"_argb;
-	printf("r:%02x g:%02x b:%02x a:%02x", color.RGBA.r, color.RGBA.g, color.RGBA.b, color.RGBA.alpha);
+	for (uint32_t i : fib) {
+		printf("%d\n", i);
+	}
 
-	draw(0xFFEEBBDD_argb);
-
+	char buff[Fibonacci(20)] = { 0 };
 	getchar();
 	return 0;
 }
